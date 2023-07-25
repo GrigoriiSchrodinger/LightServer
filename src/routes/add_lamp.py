@@ -1,21 +1,18 @@
-import threading
-import time
-import random
-
-from yeelight import Bulb
+from flask import request, abort, jsonify
 from . import main
+from ..lamps.lamps_manager import LampsControl
+from ..storage.database import LampsManager
 
 
-@main.route('/')
-def hello_world():
-    threading.Thread(target=execute_function_thread).start()
-    return 'lamp on'
+@main.route('/', methods=['POST'])
+def add_lamp():
+    data = {'ip': request.form.get("ip"), 'name': request.form.get("name")}
 
+    bulb = LampsControl(data["ip"])
+    if bulb.check():
+        lamps_manager = LampsManager()
+        lamps_manager.add_lamp(ip=data["ip"], name=data["name"], status=bulb.get_status())
+        return jsonify({'message': 'Success'}), 200
+    else:
+        abort(400, "IP fail")
 
-def execute_function_thread():
-    bulb = Bulb("192.168.0.238")
-    for x in range(10):
-        bulb.turn_on(effect="sudden")
-        time.sleep(random.random())
-        bulb.turn_off()
-        time.sleep(random.random())

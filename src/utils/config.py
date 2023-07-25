@@ -1,0 +1,1 @@
+path_sql: str = "src/storage/database.db"
