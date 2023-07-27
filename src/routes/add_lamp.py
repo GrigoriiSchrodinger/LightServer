@@ -8,10 +8,10 @@ from ..storage.database import LampsManager
 def add_lamp():
     data = {'ip': request.form.get("ip"), 'name': request.form.get("name")}
 
-    bulb = LampsControl(data["ip"])
+    bulb = LampsControl(data["ip"], 0)
     if bulb.check():
         lamps_manager = LampsManager()
-        lamps_manager.add_lamp(ip=data["ip"], name=data["name"], status=bulb.get_status())
+        lamps_manager.add_lamp(ip=data["ip"], name=data["name"], status=bulb.get_status(), dead=0)
         return jsonify({'message': 'Success'}), 200
     else:
         abort(400, "IP fail")

@@ -48,12 +48,13 @@ class SqlManager(Database):
 
 
 class LampsManager(SqlManager):
-    _QUERY_ADD_LAMP: str = "INSERT INTO lamps (ip, name, status) VALUES (?, ?, ?)"
+    _QUERY_ADD_LAMP: str = "INSERT INTO lamps (ip, name, status, dead) VALUES (?, ?, ?,?)"
     _QUERY_UPDATE_LAMP_STATUS: str = "UPDATE lamps SET status=? WHERE ip=?"
-    _QUERY_GET_ALL_LAMPS: str = "SELECT ip, name, status FROM lamps;"
+    _QUERY_UPDATE_LAMP_DEAD: str = "UPDATE lamps SET dead=? WHERE ip=?"
+    _QUERY_GET_ALL_LAMPS: str = "SELECT ip, name, status, dead FROM lamps;"
 
-    def add_lamp(self, ip: str, name: str, status: str):
-        self.push(self._QUERY_ADD_LAMP, (ip, name, status,))
+    def add_lamp(self, ip: str, name: str, status: str, dead: int):
+        self.push(self._QUERY_ADD_LAMP, (ip, name, status, dead))
 
     def update_lamp_status(self, ip: str, status: str):
         self.push(self._QUERY_UPDATE_LAMP_STATUS, (status, ip,))
@@ -61,4 +62,5 @@ class LampsManager(SqlManager):
     def get_lamps(self):
         return self.get(self._QUERY_GET_ALL_LAMPS)
 
-
+    def update_lamp_dead(self, ip: str, dead: int):
+        self.push(self._QUERY_UPDATE_LAMP_DEAD, (dead, ip,))

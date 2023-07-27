@@ -2,5 +2,6 @@ CREATE TABLE IF NOT EXISTS lamps (
     id INTEGER PRIMARY KEY,
     ip TEXT NOT NULL,
     name TEXT NOT NULL,
-    status TEXT NOT NULL
+    status TEXT NOT NULL,
+    dead INTEGER NOT NULL
 );
